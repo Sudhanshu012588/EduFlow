@@ -4,6 +4,8 @@ import cookieParser from 'cookie-parser';
 import express from "express";
 import cors from "cors";
 import router from './Routes/userRouter.js'
+import multer from 'multer';
+import cloudinary from 'cloudinary';
 const app = express();
 
 dotenv.config({
@@ -15,8 +17,6 @@ app.use(cors({
 
 }))
 
-
-app.use(express.json({limit:"16kb"}));
 app.use(express.urlencoded({extended:true,limit:"16kb"})) // encoding the url
 app.use(express.static("public")); // folder where we want to keep the files like pdf e.t.c;
 app.use(cookieParser());
@@ -31,9 +31,8 @@ connectDB()
 .catch((err) => {
     console.log(`Database connection error: ${err.message}`);
 })
-
-app.use('/user/auth/signup',userRouter)
-
+app.use('/user/auth',router)
+app.use('/user/upload',router)
 const Port = process.env.PORT || 5000;
 app.get("/", (req, res) => {
     res.send("Hello World");
